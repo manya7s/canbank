@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'transfer_type_page.dart';
 import 'transaction_history_page.dart';
 import 'login_page.dart';
+import 'fixed_deposit_page.dart';
+import 'beneficiary_page.dart';
+import 'manage_fixed_deposit_page.dart';
+import 'card_page.dart';
+
 
 class HomePage extends StatelessWidget {
   final Color primaryBlue = Color(0xFF3B5EDF);
@@ -59,8 +64,10 @@ class HomePage extends StatelessWidget {
                 Navigator.push(context, MaterialPageRoute(builder: (_) => TransferTypePage()));
               }},
               {'label': 'Account Summary', 'icon': Icons.account_balance, 'action': () {}},
-              {'label': 'Pay Bills', 'icon': Icons.receipt, 'action': () {}},  // Fixed typo: receipt -> receipt
-              {'label': 'Fixed Deposit', 'icon': Icons.savings, 'action': () {}},
+              {'label': 'Pay Bills', 'icon': Icons.receipt, 'action': () {}},
+              {'label': 'Fixed Deposit', 'icon': Icons.savings, 'action': () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => FixedDepositPage()));
+              }},
               {'label': 'Cash', 'icon': Icons.attach_money, 'action': () {}},
               {'label': 'Recharge', 'icon': Icons.phone_android, 'action': () {}},
               {'label': 'Statements', 'icon': Icons.insert_drive_file, 'action': () {
@@ -72,38 +79,50 @@ class HomePage extends StatelessWidget {
             _promoBanner("Medical Expenses", "Get covered up to 25%", Icons.health_and_safety, Colors.orange),
             SizedBox(height: 16),
             _sectionTitle("Pay & Transfer"),
-            _iconRow([
-              {'label': 'Send Money', 'icon': Icons.send},
+            _iconGrid([
+              {'label': 'Send Money', 'icon': Icons.send, 'action': () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => TransferTypePage()));
+              }},
               {'label': 'Direct Pay', 'icon': Icons.qr_code_scanner},
               {'label': 'ePassbook', 'icon': Icons.book},
-              {'label': 'My Beneficiary', 'icon': Icons.group},
+              {'label': 'My Beneficiary', 'icon': Icons.group, 'action': () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => BeneficiaryPage()));
+              }},
             ]),
-            _iconRow([
+            _iconGrid([
               {'label': 'Card-less', 'icon': Icons.credit_card_off},
               {'label': 'Donation', 'icon': Icons.volunteer_activism},
-              {'label': 'History', 'icon': Icons.history},
+              {'label': 'History', 'icon': Icons.history, 'action': () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => TransactionHistoryPage()));
+              }},
               {'label': 'Manage', 'icon': Icons.settings},
             ]),
             SizedBox(height: 16),
             _sectionTitle("Accounts & Services"),
-            _iconRow([
+            _iconGrid([
               {'label': 'Account Summary', 'icon': Icons.account_balance},
-              {'label': 'Mobile Banking', 'icon': Icons.phone_android},
-              {'label': 'Statement', 'icon': Icons.description},
+              {'label': 'Passbook', 'icon': Icons.menu_book},
+              {'label': 'Statement', 'icon': Icons.description, 'action': () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => TransactionHistoryPage()));
+              }},
               {'label': 'Settings', 'icon': Icons.settings},
             ]),
-            _iconRow([
+            _iconGrid([
+              {'label': 'Credit Card', 'icon': Icons.credit_card, 'action': () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => CardsPage()));
+              }},
               {'label': 'Debit Card', 'icon': Icons.credit_card},
               {'label': 'Security', 'icon': Icons.security},
               {'label': 'Passbook', 'icon': Icons.menu_book},
-              {'label': 'Calculator', 'icon': Icons.calculate},
             ]),
             SizedBox(height: 16),
             _sectionTitle("Deposits"),
-            _iconRow([
+            _iconGrid([
               {'label': 'FD Calculator', 'icon': Icons.calculate},
               {'label': 'Deposit History', 'icon': Icons.list_alt},
-              {'label': 'Manage Deposits', 'icon': Icons.folder},
+              {'label': 'Manage Deposits', 'icon': Icons.folder, 'action': () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => ManageFixedDepositsPage()));
+              }},
               {'label': 'Certificates', 'icon': Icons.verified},
             ]),
             SizedBox(height: 24),
@@ -115,16 +134,36 @@ class HomePage extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: primaryBlue,
         unselectedItemColor: Colors.grey,
+        onTap: (index) {
+          switch (index) {
+            case 0: // All (Home)
+            // Already on home page
+              break;
+            case 1: // Cards
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => CardsPage()),
+              );
+              break;
+            case 2: // Transaction History
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => TransactionHistoryPage()),
+              );
+              break;
+          }
+        },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.apps), label: 'All'),
-          BottomNavigationBarItem(icon: Icon(Icons.receipt_long), label: 'Bill Pay'),
-          BottomNavigationBarItem(icon: Icon(Icons.mobile_friendly), label: 'Canara Digital'),
+          BottomNavigationBarItem(icon: Icon(Icons.credit_card), label: 'Cards'),
+          BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Transaction History'),
           BottomNavigationBarItem(icon: Icon(Icons.location_on), label: 'ATM'),
           BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: 'More'),
         ],
       ),
     );
   }
+
 
   Widget _sectionTitle(String title) => Padding(
     padding: const EdgeInsets.only(bottom: 8.0),
