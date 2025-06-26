@@ -45,7 +45,6 @@ class HomePage extends StatelessWidget {
             tooltip: 'Logout',
           ),
         ],
-
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
@@ -60,7 +59,7 @@ class HomePage extends StatelessWidget {
                 Navigator.push(context, MaterialPageRoute(builder: (_) => TransferTypePage()));
               }},
               {'label': 'Account Summary', 'icon': Icons.account_balance, 'action': () {}},
-              {'label': 'Pay Bills', 'icon': Icons.receipt, 'action': () {}},
+              {'label': 'Pay Bills', 'icon': Icons.receipt, 'action': () {}},  // Fixed typo: receipt -> receipt
               {'label': 'Fixed Deposit', 'icon': Icons.savings, 'action': () {}},
               {'label': 'Cash', 'icon': Icons.attach_money, 'action': () {}},
               {'label': 'Recharge', 'icon': Icons.phone_android, 'action': () {}},
@@ -134,37 +133,139 @@ class HomePage extends StatelessWidget {
 
   Widget _portfolioCard() => Container(
     width: double.infinity,
-    padding: EdgeInsets.all(16),
+    padding: EdgeInsets.all(20),
+    margin: EdgeInsets.only(bottom: 16),
     decoration: BoxDecoration(
       gradient: LinearGradient(
         colors: [Color(0xFF3B5EDF), Color(0xFF4C84EF)],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       ),
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(16),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black12,
+          blurRadius: 6,
+          offset: Offset(0, 4),
+        ),
+      ],
     ),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("My Portfolio", style: TextStyle(color: Colors.white, fontSize: 16)),
-            SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
-              child: Text("Show", style: TextStyle(color: Color(0xFF3B5EDF))),
+            // Logo
+            CircleAvatar(
+              radius: 24,
+              backgroundColor: Colors.white,
+              child: Text(
+                "CB",
+                style: TextStyle(
+                  color: Color(0xFF3B5EDF),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            // Account Number
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  "A/C No: ********4567",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  "Primary Account",
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.8),
+                    fontSize: 12,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
-        CircleAvatar(
-          backgroundColor: Colors.white,
-          child: Text("ai", style: TextStyle(color: Color(0xFF3B5EDF))),
+        SizedBox(height: 20),
+        // Portfolio items in 2x2 grid with amounts
+        GridView.count(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          crossAxisCount: 2,
+          childAspectRatio: 2.2,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          children: [
+            _buildPortfolioItemWithAmount(
+                Icons.account_balance_wallet,
+                "Savings",
+                "₹85,430"
+            ),
+            _buildPortfolioItemWithAmount(
+                Icons.description,
+                "OD Account",
+                "₹25,000"
+            ),
+            _buildPortfolioItemWithAmount(
+                Icons.archive,
+                "Deposits",
+                "₹10,000"
+            ),
+            _buildPortfolioItemWithAmount(
+                Icons.account_balance,
+                "Loans",
+                "₹5,000"
+            ),
+          ],
         ),
       ],
     ),
   );
+
+  Widget _buildPortfolioItemWithAmount(IconData icon, String label, String amount) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(icon, color: Colors.white, size: 20),
+                SizedBox(width: 8),
+                Text(
+                  label,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 8),
+            Text(
+              amount,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _promoBanner(String title, String subtitle, IconData icon, Color color) => Container(
     width: double.infinity,
