@@ -1,6 +1,6 @@
-import 'package:dummy_bank/screens/demand_draft_page.dart';
-import 'package:dummy_bank/screens/other_bank_transfer_page.dart';
-import 'package:dummy_bank/screens/upi_transfer.dart';
+import 'package:dummy_bank/screens/pay_n_transfer/transactions/demand_draft_page.dart';
+import 'package:dummy_bank/screens/pay_n_transfer/transactions/other_bank_transfer_page.dart';
+import 'package:dummy_bank/screens/pay_n_transfer/transactions/upi_transfer.dart';
 import 'package:flutter/material.dart';
 import 'within_bank_transfer_page.dart';
 

@@ -10,7 +10,6 @@ class TransactionHistoryPage extends StatelessWidget {
     {"title": "Petrol", "amount": "-₹400", "date": "2024-01-14", "type": "debit"},
     {"title": "Surat Trip", "amount": "+₹1500", "date": "2024-01-15", "type": "credit"},
     {"title": "Rewards", "amount": "+₹150", "date": "2024-01-15", "type": "credit"},
-
   ];
 
   @override
@@ -19,32 +18,36 @@ class TransactionHistoryPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "Transaction History",
-          style: TextStyle(
-            color: Colors.white, // Title text color
-          ),
+          style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Color(0xFF3B5EDF),
-        iconTheme: IconThemeData(
-          color: Colors.white, // Back arrow color
-        ),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
-
       body: ListView(
         padding: EdgeInsets.all(16),
         children: [
+          // Center-aligned cards using Wrap
           Wrap(
+            alignment: WrapAlignment.center,
             spacing: 10,
             runSpacing: 10,
             children: [
-              _buildStatCard("₹45,625", "Total Credits", Colors.green),
-              _buildStatCard("₹6,743", "Total Debits", Colors.red),
-              _buildStatCard("24", "Transactions", Colors.blue),
-              _buildStatCard("₹1,25,430", "Current Balance", Colors.purple),
+              _buildStatCard(context, "₹45,625", "Total Credits", Colors.green),
+              _buildStatCard(context, "₹6,743", "Total Debits", Colors.red),
+              _buildStatCard(context, "24", "Transactions", Colors.blue),
+              _buildStatCard(context, "₹1,25,430", "Current Balance", Colors.purple),
             ],
           ),
-          SizedBox(height: 16),
-          Text("Recent Transactions", style: Theme.of(context).textTheme.headlineSmall),
-          SizedBox(height: 10),
+          SizedBox(height: 24), // Increased from 16 to 24
+          Text(
+            "Recent Transactions",
+            style: TextStyle( // Replaced Theme.of(context).textTheme.headlineSmall
+              fontSize: 18, // Reduced from default headlineSmall (usually 24)
+              fontWeight: FontWeight.w600, // Semi-bold instead of bold
+              color: Colors.black87,
+            ),
+          ),
+          SizedBox(height: 12), // Reduced from 10 to 12
           ...transactions.map((txn) => ListTile(
             leading: Icon(
               txn["type"] == "credit" ? Icons.arrow_downward : Icons.arrow_upward,
@@ -53,16 +56,17 @@ class TransactionHistoryPage extends StatelessWidget {
             title: Text(txn["title"]!),
             subtitle: Text(txn["date"]!),
             trailing: Text(txn["amount"]!, style: TextStyle(fontWeight: FontWeight.bold)),
-          )),
+          )).toList(),
         ],
       ),
     );
   }
 
-  Widget _buildStatCard(String value, String label, Color color) {
+  Widget _buildStatCard(BuildContext context, String value, String label, Color color) {
     return Container(
-      width: 150,
+      width: MediaQuery.of(context).size.width * 0.4,
       padding: EdgeInsets.all(16),
+      margin: EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
@@ -71,7 +75,8 @@ class TransactionHistoryPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: color)),
-          Text(label, style: TextStyle(color: Colors.black54)),
+          SizedBox(height: 4),
+          Text(label, style: TextStyle(color: Colors.black54, fontSize: 12)),
         ],
       ),
     );
