@@ -182,7 +182,10 @@ class _LoanPageState extends State<LoanPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Loans"),
+        title: Text("My Loans",
+          style: TextStyle(color: Colors.white),),
+        backgroundColor: Color(0xFF3B5EDF),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: _loans.isEmpty
           ? Center(
@@ -336,7 +339,7 @@ class _LoanPageState extends State<LoanPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddDialog,
         child: Icon(Icons.add, color: Colors.white),
-        backgroundColor: Colors.blue,
+        backgroundColor: Color(0xFF3B5EDF),
         elevation: 4,
       ),
     );
