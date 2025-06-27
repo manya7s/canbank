@@ -125,15 +125,8 @@ class _LoginPageState extends State<LoginPage> {
             width: 300,
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 24),
             decoration: BoxDecoration(
-              color: Colors.grey[50],
+              color: Colors.white,
               borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 6,
-                  offset: Offset(0, 3),
-                ),
-              ],
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
