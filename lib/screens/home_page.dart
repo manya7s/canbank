@@ -1,5 +1,6 @@
 import 'package:dummy_bank/screens/deposits/fixed_deposit_page.dart';
 import 'package:dummy_bank/screens/deposits/manage_deposits_page.dart';
+import 'package:dummy_bank/screens/pay_n_transfer/loan/loan_page.dart';
 import 'package:flutter/material.dart';
 import 'pay_n_transfer/transactions/transfer_type_page.dart';
 import 'pay_n_transfer/transactions/transaction_history_page.dart';
@@ -104,7 +105,10 @@ class HomePage extends StatelessWidget {
             ]),
             _iconGrid([
               {'label': 'Card-less', 'icon': Icons.credit_card_off},
-              {'label': 'Loan', 'icon': Icons.currency_rupee},
+              {'label': 'Loan', 'icon': Icons.currency_rupee,
+              'action': () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => LoanPage()));
+              }},
               {'label': 'History',
                 'icon': Icons.history,
                 'action': () {
