@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
-import '../widgets/pin_input.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -46,17 +45,14 @@ class _LoginPageState extends State<LoginPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(5, (index) {
-        return Container(
-          margin: EdgeInsets.symmetric(horizontal: 8),
-          padding: EdgeInsets.all(12),
+        return AnimatedContainer(
+          duration: Duration(milliseconds: 200),
+          margin: EdgeInsets.symmetric(horizontal: 6),
+          width: 16,
+          height: 16,
           decoration: BoxDecoration(
-            shape: BoxShape.rectangle,
-            border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(
-            index < enteredPin.length ? '●' : '',
-            style: TextStyle(fontSize: 24),
+            shape: BoxShape.circle,
+            color: index < enteredPin.length ? Color(0xFF3B5EDF) : Colors.grey[300],
           ),
         );
       }),
@@ -65,34 +61,44 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget buildNumberPad() {
     final keys = [
-      '1','2','3',
-      '4','5','6',
-      '7','8','9',
-      '','0','⌫',
+      '1', '2', '3',
+      '4', '5', '6',
+      '7', '8', '9',
+      '', '0', '⌫',
     ];
+
     return GridView.builder(
       shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       itemCount: keys.length,
-      gridDelegate:
-      SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+      padding: EdgeInsets.all(4),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
+        childAspectRatio: 1.1,
+      ),
       itemBuilder: (context, index) {
         final key = keys[index];
-        if (key == '') return Container();
+        if (key == '') return SizedBox();
+
         return InkWell(
           onTap: () {
             key == '⌫' ? onDelete() : onKeyTap(key);
           },
+          borderRadius: BorderRadius.circular(8),
           child: Container(
-            margin: EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(20),
               border: Border.all(color: Colors.grey.shade300),
-              borderRadius: BorderRadius.circular(8),
             ),
             child: Center(
-              child: Text(
+              child: key == '⌫'
+                  ? Icon(Icons.backspace_outlined, size: 20, color: Colors.black54)
+                  : Text(
                 key,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -104,57 +110,67 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Container(
-              padding: EdgeInsets.all(24),
-              margin: EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CircleAvatar(
-                    radius: 30,
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.white, Colors.white],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Center(
+          child: Container(
+            width: 300,
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+            decoration: BoxDecoration(
+              color: Colors.grey[50],
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 6,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircleAvatar(
+                  radius: 26,
+                  backgroundColor: Color(0xFF3B5EDF),
+                  child: Text("ai", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "Canara Bank",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF3B5EDF)),
+                ),
+                SizedBox(height: 4),
+                Text("Enter your 5-digit PIN", style: TextStyle(color: Colors.black87)),
+                SizedBox(height: 20),
+                buildPinBox(),
+                SizedBox(height: 24),
+                buildNumberPad(),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: onLogin,
+                  style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF3B5EDF),
-                    child: Text("ai", style: TextStyle(color: Colors.white)),
+                    minimumSize: Size(double.infinity, 42),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
-                  SizedBox(height: 16),
-                  Text("Canara Bank", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 8),
-                  Text("Enter your 5-digit PIN to continue"),
-                  SizedBox(height: 24),
-                  PinInput(enteredPin: enteredPin),
-                  SizedBox(height: 24),
-                  buildNumberPad(),
-                  SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: onLogin,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF3B5EDF),
-                      minimumSize: Size(double.infinity, 48),
-                    ),
-                    child: Text(
-                      "Login",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 19// Set text color to white
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 8),
-                  Text("Demo PIN: 12345", style: TextStyle(color: Colors.grey)),
-                ],
-              ),
+                  child: Text("Login", style: TextStyle(fontSize: 16, color: Colors.white)),
+                ),
+                SizedBox(height: 10),
+                Text("Demo PIN: 12345", style: TextStyle(color: Colors.grey, fontSize: 12)),
+              ],
             ),
           ),
         ),
       ),
     );
   }
-
 }
