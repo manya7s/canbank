@@ -1,13 +1,12 @@
+import 'package:dummy_bank/screens/deposits/fixed_deposit_page.dart';
+import 'package:dummy_bank/screens/deposits/manage_deposits_page.dart';
 import 'package:flutter/material.dart';
-import 'transfer_type_page.dart';
-import 'transaction_history_page.dart';
+import 'pay_n_transfer/transactions/transfer_type_page.dart';
+import 'pay_n_transfer/transactions/transaction_history_page.dart';
 import 'login_page.dart';
-import 'fixed_deposit_page.dart';
-import 'beneficiary_page.dart';
-import 'manage_fixed_deposit_page.dart';
-import 'card_page.dart';
-import 'loan_page.dart';
-
+import 'pay_n_transfer/transactions/upi_transfer.dart';
+import 'pay_n_transfer/beneficiaries/beneficiaries_page.dart';
+import 'accounts_n_services/card_page.dart';
 class HomePage extends StatelessWidget {
   final Color primaryBlue = Color(0xFF3B5EDF);
   final Color lightBg = Color(0xFFF5F7FA);
@@ -24,7 +23,7 @@ class HomePage extends StatelessWidget {
             CircleAvatar(
               radius: 16,
               backgroundColor: primaryBlue,
-              child: Text('U', style: TextStyle(color: Colors.white)),
+              child: Text('D', style: TextStyle(color: Colors.white)),
             ),
             SizedBox(width: 8),
             Text("Dear Customer", style: TextStyle(color: Colors.black, fontSize: 20)),
@@ -60,19 +59,23 @@ class HomePage extends StatelessWidget {
             SizedBox(height: 16),
             _sectionTitle("Quick Actions"),
             _iconGrid([
-              {'label': 'Send Money', 'icon': Icons.send, 'action': () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => TransferTypePage()));
-              }},
+              {
+                'label': 'Send Money',
+                'icon': Icons.send,
+                'action': () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => TransferTypePage()));
+                }
+              },
               {'label': 'Account Summary', 'icon': Icons.account_balance, 'action': () {}},
               {'label': 'Pay Bills', 'icon': Icons.receipt, 'action': () {}},
               {'label': 'Fixed Deposit', 'icon': Icons.savings, 'action': () {
                 Navigator.push(context, MaterialPageRoute(builder: (_) => FixedDepositPage()));
               }},
-              {'label': 'Cash', 'icon': Icons.attach_money, 'action': () {}},
+              {'label': 'Rewards', 'icon': Icons.card_giftcard, 'action': () {}},
               {'label': 'Recharge', 'icon': Icons.phone_android, 'action': () {}},
               {'label': 'Statements', 'icon': Icons.insert_drive_file, 'action': () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => TransactionHistoryPage()));
-              }},
+                Navigator.push(context, MaterialPageRoute(builder: (_) => TransactionHistoryPage()));}
+              },
               {'label': 'Accounts', 'icon': Icons.account_box, 'action': () {}},
             ]),
             SizedBox(height: 16),
@@ -80,51 +83,66 @@ class HomePage extends StatelessWidget {
             SizedBox(height: 16),
             _sectionTitle("Pay & Transfer"),
             _iconGrid([
-              {'label': 'Send Money', 'icon': Icons.send, 'action': () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => TransferTypePage()));
-              }},
-              {'label': 'Direct Pay', 'icon': Icons.qr_code_scanner},
+              {
+                'label': 'Send Money',
+                'icon': Icons.send,
+                'action': () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => TransferTypePage()));
+                }
+              },
+              {'label': 'Direct Pay', 'icon': Icons.qr_code_scanner,
+                'action': () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => UpiTransferPage()));
+                }
+              },
               {'label': 'ePassbook', 'icon': Icons.book},
-              {'label': 'My Beneficiary', 'icon': Icons.group, 'action': () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => BeneficiaryPage()));
-              }},
+              {'label': 'Beneficiaries',
+                'icon': Icons.group,
+                'action': () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => BeneficiariesPage()));
+                }},
             ]),
             _iconGrid([
               {'label': 'Card-less', 'icon': Icons.credit_card_off},
-              {'label': 'Donation', 'icon': Icons.volunteer_activism},
-              {'label': 'History', 'icon': Icons.history, 'action': () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => TransactionHistoryPage()));
-              }},
+              {'label': 'Loan', 'icon': Icons.currency_rupee},
+              {'label': 'History',
+                'icon': Icons.history,
+                'action': () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => TransactionHistoryPage()));
+                }},
               {'label': 'Manage', 'icon': Icons.settings},
             ]),
+            SizedBox(height: 16),
+            _promoBanner("Fast UPI Payments", "Convenient cashless transfers", Icons.money, Colors.green),
             SizedBox(height: 16),
             _sectionTitle("Accounts & Services"),
             _iconGrid([
               {'label': 'Account Summary', 'icon': Icons.account_balance},
-              {'label': 'Passbook', 'icon': Icons.menu_book},
-              {'label': 'Statement', 'icon': Icons.description, 'action': () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => TransactionHistoryPage()));
-              }},
+              {'label': 'Mobile Banking', 'icon': Icons.phone_android},
+              {'label': 'Statement',
+                'icon': Icons.description,
+                'action': () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => TransactionHistoryPage()));
+                }},
               {'label': 'Settings', 'icon': Icons.settings},
             ]),
             _iconGrid([
-              {'label': 'Credit Card', 'icon': Icons.credit_card, 'action': () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => CardsPage()));
-              }},
-              {'label': 'Debit Card', 'icon': Icons.credit_card},
+              {'label': 'Debit Card', 'icon': Icons.credit_card,
+              'action': () {Navigator.push(context, MaterialPageRoute(builder: (_) => CardsPage()));}},
               {'label': 'Security', 'icon': Icons.security},
-              {'label': 'Loans', 'icon': Icons.menu_book, 'action': () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => LoanPage()));
-              }},
+              {'label': 'Passbook', 'icon': Icons.menu_book},
+              {'label': 'Calculator', 'icon': Icons.calculate},
             ]),
             SizedBox(height: 16),
             _sectionTitle("Deposits"),
             _iconGrid([
               {'label': 'FD Calculator', 'icon': Icons.calculate},
               {'label': 'Deposit History', 'icon': Icons.list_alt},
-              {'label': 'Manage Deposits', 'icon': Icons.folder, 'action': () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => ManageFixedDepositsPage()));
-              }},
+              {'label': 'Manage Deposits',
+                'icon': Icons.folder,
+                'action': () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => ManageDepositsPage()));
+                }},
               {'label': 'Certificates', 'icon': Icons.verified},
             ]),
             SizedBox(height: 24),
@@ -136,6 +154,8 @@ class HomePage extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: primaryBlue,
         unselectedItemColor: Colors.grey,
+        backgroundColor: Colors.white,
+        type: BottomNavigationBarType.fixed,
         onTap: (index) {
           switch (index) {
             case 0: // All (Home)
@@ -165,7 +185,6 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-
 
   Widget _sectionTitle(String title) => Padding(
     padding: const EdgeInsets.only(bottom: 8.0),
@@ -197,7 +216,6 @@ class HomePage extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Logo
             CircleAvatar(
               radius: 24,
               backgroundColor: Colors.white,
@@ -210,7 +228,6 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-            // Account Number
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -234,12 +251,11 @@ class HomePage extends StatelessWidget {
           ],
         ),
         SizedBox(height: 20),
-        // Portfolio items in 2x2 grid with amounts
         GridView.count(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           crossAxisCount: 2,
-          childAspectRatio: 2.2,
+          childAspectRatio: 2,
           mainAxisSpacing: 12,
           crossAxisSpacing: 12,
           children: [
@@ -350,24 +366,5 @@ class HomePage extends StatelessWidget {
         ),
       );
     }).toList(),
-  );
-
-  Widget _iconRow(List<Map<String, dynamic>> items) => Padding(
-    padding: const EdgeInsets.only(bottom: 16),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: items.map((item) {
-        return Column(
-          children: [
-            CircleAvatar(
-              backgroundColor: Colors.white,
-              child: Icon(item['icon'], color: Color(0xFF3B5EDF)),
-            ),
-            SizedBox(height: 4),
-            Text(item['label'], textAlign: TextAlign.center, style: TextStyle(fontSize: 12)),
-          ],
-        );
-      }).toList(),
-    ),
   );
 }
